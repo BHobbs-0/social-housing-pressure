@@ -1,0 +1,40 @@
+relationship AutoDetected_a7d55a8a-9203-42e4-9081-daf61c7759f9
+	fromColumn: fact_homelessness.la_code
+	toColumn: dim_local_authority.la_code
+
+relationship AutoDetected_52c178cd-b352-464f-a612-3e5bd23dd197
+	fromColumn: fact_lettings.la_code
+	toColumn: dim_local_authority.la_code
+
+relationship AutoDetected_f0292aba-716a-4bf0-8da1-5eadce66d354
+	fromColumn: fact_prp_stock.la_code
+	toColumn: dim_local_authority.la_code
+
+relationship AutoDetected_8bf30851-a23e-4c78-b6a1-85acc379304f
+	fromColumn: fact_relets_2025.la_code
+	toColumn: dim_local_authority.la_code
+
+relationship AutoDetected_c48d32c3-cc2a-4388-b816-a2701b4194d2
+	fromColumn: dim_local_authority.region_code
+	toColumn: dim_region.region_code
+
+relationship AutoDetected_b4edb2c0-024e-4bc7-aad4-27d733613c1e
+	fromColumn: fact_homelessness_published.region_code
+	toColumn: dim_region.region_code
+
+relationship 5c70d706-ea30-b7c3-17b3-f666720bc1ed
+	fromColumn: fact_homelessness_published.quarter_end
+	toColumn: dim_date.date
+
+relationship 7b8399af-710b-a568-168b-84a9c59164e6
+	fromColumn: fact_homelessness.quarter_end
+	toColumn: dim_date.date
+
+relationship bbd29f4b-1bfb-e306-0bf7-2adcaaea5d17
+	fromColumn: fact_lettings.year_end
+	toColumn: dim_date.date
+
+relationship de4460e0-5b93-43a1-b58a-b36b68e6e4c4
+	fromColumn: fact_prp_stock.as_at
+	toColumn: dim_date.date
+

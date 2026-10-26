@@ -1,0 +1,157 @@
+table dim_date
+	lineageTag: 22618e5e-c2e1-45eb-9d27-ed28989428f2
+	dataCategory: Time
+
+	column date
+		dataType: dateTime
+		isKey
+		formatString: Long Date
+		lineageTag: ab62677c-cb43-43b3-99f2-c20edaffc9b8
+		summarizeBy: none
+		sourceColumn: date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column year
+		dataType: int64
+		formatString: 0
+		lineageTag: 9ddb481d-826e-4107-a3e4-ab9e59a3462b
+		summarizeBy: none
+		sourceColumn: year
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column month_number
+		dataType: int64
+		formatString: 0
+		lineageTag: 2b9ba881-e657-4e60-a15d-db6974855100
+		summarizeBy: none
+		sourceColumn: month_number
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column month_name
+		dataType: string
+		lineageTag: e5705278-142e-4367-a16d-fdd36fce9911
+		summarizeBy: none
+		sourceColumn: month_name
+		sortByColumn: month_number
+
+		changedProperty = SortByColumn
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column calendar_quarter
+		dataType: string
+		lineageTag: a9121d15-0cc1-4cf3-acc4-f078afb191ff
+		summarizeBy: none
+		sourceColumn: calendar_quarter
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column quarter_label
+		dataType: string
+		lineageTag: 5681778d-75d0-47aa-8a2b-682fd2fa5d53
+		summarizeBy: none
+		sourceColumn: quarter_label
+		sortByColumn: quarter_sort
+
+		changedProperty = SortByColumn
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column quarter_sort
+		dataType: int64
+		formatString: 0
+		lineageTag: 4606a37a-0e55-4056-934c-9009a4480cc1
+		summarizeBy: none
+		sourceColumn: quarter_sort
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column financial_year
+		dataType: string
+		lineageTag: 83bcfcc1-ee82-4162-86e6-f03428b6bbf4
+		summarizeBy: none
+		sourceColumn: financial_year
+		sortByColumn: financial_year_sort
+
+		changedProperty = SortByColumn
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column financial_year_sort
+		dataType: int64
+		formatString: 0
+		lineageTag: 5e866ee1-f26a-43bd-b5a6-8cb0df001364
+		summarizeBy: none
+		sourceColumn: financial_year_sort
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column fiscal_quarter
+		dataType: string
+		lineageTag: f9969125-6cfd-4237-b10a-56b3e3152c7d
+		summarizeBy: none
+		sourceColumn: fiscal_quarter
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_quarter_end
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: f2c6ae85-de35-4c68-aaf4-f8afde52feaa
+		summarizeBy: none
+		sourceColumn: is_quarter_end
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_financial_year_end
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: d45581fe-3fd7-4c82-946e-05a5b71d999e
+		summarizeBy: none
+		sourceColumn: is_financial_year_end
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_date = m
+		mode: import
+		source =
+				fnLoadCsv("dim_date.csv", {
+				    {"date", type date}, {"year", Int64.Type}, {"month_number", Int64.Type},
+				    {"month_name", type text}, {"calendar_quarter", type text}, {"quarter_label", type text},
+				    {"quarter_sort", Int64.Type}, {"financial_year", type text}, {"financial_year_sort", Int64.Type},
+				    {"fiscal_quarter", type text}, {"is_quarter_end", type logical}, {"is_financial_year_end", type logical}
+				})
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

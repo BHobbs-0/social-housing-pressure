@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "SocialHousingPressure"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "e3f9a5d6-84d2-495a-9113-be34e1378aac"
+  }
+}

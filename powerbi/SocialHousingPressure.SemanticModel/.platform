@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "SocialHousingPressure"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "5c41eeaa-8796-49bc-b9da-0d10bfee396d"
+  }
+}

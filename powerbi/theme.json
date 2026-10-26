@@ -1,0 +1,98 @@
+{
+  "name": "Social Housing Pressure",
+  "dataColors": [
+    "#3A3644",
+    "#E8C547",
+    "#8E7DBE",
+    "#5BA3A6",
+    "#D9822B",
+    "#4F7CAC",
+    "#C75D6E",
+    "#9AA641",
+    "#A8A4B3",
+    "#7A5C3E"
+  ],
+  "background": "#FFFFFF",
+  "foreground": "#2B2833",
+  "tableAccent": "#3A3644",
+  "good": "#5E8C61",
+  "neutral": "#E8C547",
+  "bad": "#B5463C",
+  "maximum": "#2F2C38",
+  "center": "#E8C547",
+  "minimum": "#FBEFC4",
+  "textClasses": {
+    "title": { "fontFace": "Segoe UI Semibold", "fontSize": 14, "color": "#2B2833" },
+    "header": { "fontFace": "Segoe UI Semibold", "fontSize": 11, "color": "#2B2833" },
+    "label": { "fontFace": "Segoe UI", "fontSize": 10, "color": "#5C5668" },
+    "callout": { "fontFace": "Segoe UI Semibold", "fontSize": 32, "color": "#E8C547" }
+  },
+  "visualStyles": {
+    "*": {
+      "*": {
+        "background": [{ "show": true, "color": { "solid": { "color": "#FFFFFF" } }, "transparency": 0 }],
+        "border": [{ "show": false, "radius": 12 }],
+        "dropShadow": [{
+          "show": true, "color": { "solid": { "color": "#2B2833" } }, "transparency": 90,
+          "preset": "Custom", "position": "Outer", "shadowBlur": 12, "shadowDistance": 3, "shadowSpread": 0, "angle": 90
+        }],
+        "padding": [{ "top": 12, "bottom": 12, "left": 16, "right": 16 }],
+        "title": [{ "show": true, "fontColor": { "solid": { "color": "#2B2833" } }, "fontSize": 14, "fontFamily": "Segoe UI Semibold" }],
+        "subTitle": [{ "fontColor": { "solid": { "color": "#7A7487" } }, "fontSize": 10 }],
+        "categoryAxis": [{ "labelColor": { "solid": { "color": "#5C5668" } }, "gridlineShow": false }],
+        "valueAxis": [{ "labelColor": { "solid": { "color": "#5C5668" } }, "gridlineColor": { "solid": { "color": "#ECEBF0" } } }],
+        "legend": [{ "labelColor": { "solid": { "color": "#5C5668" } }, "position": "Top" }]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [{ "color": { "solid": { "color": "#E9E8EE" } }, "transparency": 0 }],
+        "outspace": [{ "color": { "solid": { "color": "#E9E8EE" } }, "transparency": 0 }]
+      }
+    },
+    "card": {
+      "*": {
+        "background": [{ "show": true, "color": { "solid": { "color": "#393543" } }, "transparency": 0 }],
+        "labels": [{ "color": { "solid": { "color": "#E8C547" } }, "fontSize": 32, "fontFamily": "Segoe UI Semibold", "labelDisplayUnits": 1 }],
+        "categoryLabels": [{ "show": true, "color": { "solid": { "color": "#FFFFFF" } }, "fontSize": 13, "fontFamily": "Segoe UI" }],
+        "title": [{ "show": false }]
+      }
+    },
+    "textbox": {
+      "*": {
+        "padding": [{ "top": 0, "bottom": 0, "left": 0, "right": 0 }],
+        "background": [{ "show": false }],
+        "dropShadow": [{ "show": false }],
+        "title": [{ "show": false }]
+      }
+    },
+    "actionButton": {
+      "*": {
+        "padding": [{ "top": 0, "bottom": 0, "left": 0, "right": 0 }],
+        "background": [{ "show": false }],
+        "dropShadow": [{ "show": false }],
+        "title": [{ "show": false }]
+      }
+    },
+    "slicer": {
+      "*": {
+        "title": [{ "show": false }],
+        "header": [{ "fontColor": { "solid": { "color": "#2B2833" } }, "fontFamily": "Segoe UI Semibold", "textSize": 10 }],
+        "items": [{ "fontColor": { "solid": { "color": "#2B2833" } }, "background": { "solid": { "color": "#FFFFFF" } } }],
+        "padding": [{ "top": 6, "bottom": 6, "left": 12, "right": 12 }]
+      }
+    },
+    "lineChart": {
+      "*": {
+        "lineStyles": [{ "strokeWidth": 3, "showMarker": true, "markerSize": 4 }]
+      }
+    },
+    "tableEx": {
+      "*": {
+        "columnHeaders": [{ "fontColor": { "solid": { "color": "#FFFFFF" } }, "backColor": { "solid": { "color": "#393543" } }, "fontFamily": "Segoe UI Semibold" }],
+        "values": [{ "fontColorPrimary": { "solid": { "color": "#2B2833" } }, "backColorPrimary": { "solid": { "color": "#FFFFFF" } }, "backColorSecondary": { "solid": { "color": "#F4F3F7" } } }],
+        "grid": [{ "gridHorizontal": false, "gridVertical": false }]
+      }
+    }
+  }
+}

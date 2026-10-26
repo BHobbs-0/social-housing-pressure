@@ -1,0 +1,27 @@
+model Model
+	culture: en-GB
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-GB
+	valueFilterBehavior: independent
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_ProTooling = ["DevMode"]
+
+annotation PBI_QueryOrder = ["DataFolder","fnLoadCsv","dim_local_authority","dim_region","dim_date","fact_homelessness","fact_homelessness_published","fact_lettings","fact_prp_stock","fact_relets_2025","_Measures"]
+
+ref table dim_local_authority
+ref table dim_region
+ref table dim_date
+ref table fact_homelessness
+ref table fact_homelessness_published
+ref table fact_lettings
+ref table fact_prp_stock
+ref table fact_relets_2025
+ref table _Measures
+
+ref cultureInfo en-GB
+

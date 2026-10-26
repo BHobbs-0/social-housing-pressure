@@ -1,0 +1,28 @@
+expression fnLoadCsv =
+		(fileName as text, columnTypes as list) as table =>
+		let
+		    Raw = if Text.StartsWith(DataFolder, "http")
+		          then Web.Contents(DataFolder & fileName)
+		          else File.Contents(DataFolder & fileName),
+		    Source = Csv.Document(Raw, [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+		    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
+		    // en-GB culture so dates and decimals parse the same on any PC
+		    Typed = Table.TransformColumnTypes(Promoted, columnTypes, "en-GB")
+		in
+		    Typed
+	lineageTag: 810ac9dd-ecdc-4061-9fa9-be9677bcd303
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Function
+
+/// Folder holding the processed CSVs: the repo's GitHub raw URL, or a local data\processed\ path ending in a backslash
+expression DataFolder =
+		"https://raw.githubusercontent.com/BHobbs-0/social-housing-pressure/main/data/processed/"
+		    meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]
+	lineageTag: 48b8be9f-29ec-40aa-9c0e-ffbcc4c0eccf
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Text
+

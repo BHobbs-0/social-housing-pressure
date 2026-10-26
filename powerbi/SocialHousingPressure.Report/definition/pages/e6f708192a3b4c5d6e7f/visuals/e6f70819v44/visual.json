@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.4.0/schema.json",
+  "name": "e6f70819v44",
+  "position": {
+    "x": 1600,
+    "y": 195,
+    "z": 44000,
+    "height": 130,
+    "width": 300,
+    "tabOrder": 44000
+  },
+  "visual": {
+    "visualType": "card",
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "HA Avg Social Rent"
+                }
+              },
+              "queryRef": "_Measures.HA Avg Social Rent",
+              "nativeQueryRef": "HA Avg Social Rent",
+              "displayName": "HA social rent / week"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

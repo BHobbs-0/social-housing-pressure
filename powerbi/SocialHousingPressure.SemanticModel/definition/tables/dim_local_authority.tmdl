@@ -1,0 +1,102 @@
+table dim_local_authority
+	lineageTag: 0a697c00-4d35-4cd9-826d-ddd34fef2b22
+
+	column la_code
+		dataType: string
+		lineageTag: 6250a516-6a01-4df8-bd79-efa606cd6722
+		summarizeBy: none
+		sourceColumn: la_code
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column la_name
+		dataType: string
+		lineageTag: 714711e8-6329-4746-a9b3-e7e7a802b548
+		summarizeBy: none
+		sourceColumn: la_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column region_code
+		dataType: string
+		isHidden
+		lineageTag: 02e381af-657b-49e1-b1ed-473949882a80
+		summarizeBy: none
+		sourceColumn: region_code
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column region_name
+		dataType: string
+		isHidden
+		lineageTag: df7104a3-e2f8-430c-8502-deb427d76575
+		summarizeBy: none
+		sourceColumn: region_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column la_type
+		dataType: string
+		lineageTag: cced00cf-ac4c-4eaa-b118-cfec86b01bd3
+		summarizeBy: none
+		sourceColumn: la_type
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_london
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 0eadf06d-01b9-4b44-8a0c-9b72dc5dc286
+		summarizeBy: none
+		sourceColumn: is_london
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column households_000_latest
+		dataType: double
+		lineageTag: a8b9321e-90b0-4c7f-aa3b-f29ec49afb5c
+		summarizeBy: none
+		sourceColumn: households_000_latest
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column map_location
+		dataType: string
+		lineageTag: e5ac8c45-5e3b-423f-b592-95c86f580afd
+		dataCategory: Place
+		summarizeBy: none
+		sourceColumn: map_location
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_local_authority = m
+		mode: import
+		source =
+				fnLoadCsv("dim_local_authority.csv", {
+				    {"la_code", type text}, {"la_name", type text}, {"region_code", type text},
+				    {"region_name", type text}, {"la_type", type text}, {"is_london", type logical},
+				    {"households_000_latest", type number}, {"map_location", type text}
+				})
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

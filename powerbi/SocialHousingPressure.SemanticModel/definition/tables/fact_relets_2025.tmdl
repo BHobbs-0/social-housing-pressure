@@ -1,0 +1,144 @@
+table fact_relets_2025
+	lineageTag: abf7f6cd-7eea-4105-8fc8-2ffee984d8dd
+
+	column year_end
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: 54e929a1-8fbb-4d2e-820f-9efc86afc655
+		summarizeBy: none
+		sourceColumn: year_end
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column la_code
+		dataType: string
+		isHidden
+		lineageTag: a14d09c5-acc0-4e93-be6a-29512e8a02c6
+		summarizeBy: none
+		sourceColumn: la_code
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column avg_relet_rent
+		dataType: double
+		isHidden
+		lineageTag: 345d2919-af71-4d4e-856f-b0bf1bc0b5e1
+		summarizeBy: none
+		sourceColumn: avg_relet_rent
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column avg_market_rent
+		dataType: double
+		isHidden
+		lineageTag: 72203526-7a05-4aa8-a32c-6e51fc55b317
+		summarizeBy: none
+		sourceColumn: avg_market_rent
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column relets
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 05b0331c-8eb7-4493-9bad-71f4e92245c1
+		summarizeBy: none
+		sourceColumn: relets
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column social_stock_1_april
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1b1957b7-5fb9-423f-bf94-5e162a79f3cf
+		summarizeBy: none
+		sourceColumn: social_stock_1_april
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column relet_rent_total
+		dataType: double
+		isHidden
+		lineageTag: 8e056928-0605-42df-afbb-5822d437e7df
+		summarizeBy: none
+		sourceColumn: relet_rent_total
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column relets_with_market_rent
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 46264011-d85d-40d4-b32c-a282cc9d88fc
+		summarizeBy: none
+		sourceColumn: relets_with_market_rent
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column market_rent_total
+		dataType: double
+		isHidden
+		lineageTag: 800eed42-a151-435e-87e5-8dcd14a846b7
+		summarizeBy: none
+		sourceColumn: market_rent_total
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column relet_rent_total_market_matched
+		dataType: double
+		isHidden
+		lineageTag: bab3fb65-ef4b-4981-9d2e-341775e0daf8
+		summarizeBy: none
+		sourceColumn: relet_rent_total_market_matched
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition fact_relets_2025 = m
+		mode: import
+		source =
+				fnLoadCsv("fact_relets_2025.csv", {
+				    {"year_end", type date}, {"la_code", type text},
+				    {"avg_relet_rent", type number}, {"avg_market_rent", type number},
+				    {"relets", Int64.Type}, {"social_stock_1_april", Int64.Type},
+				    {"relet_rent_total", type number}, {"relets_with_market_rent", Int64.Type},
+				    {"market_rent_total", type number}, {"relet_rent_total_market_matched", type number}
+				})
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

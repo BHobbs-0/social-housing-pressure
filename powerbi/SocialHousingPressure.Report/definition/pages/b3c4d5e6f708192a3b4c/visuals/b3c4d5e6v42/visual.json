@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.4.0/schema.json",
+  "name": "b3c4d5e6v42",
+  "position": {
+    "x": 1280,
+    "y": 195,
+    "z": 42000,
+    "height": 130,
+    "width": 300,
+    "tabOrder": 42000
+  },
+  "visual": {
+    "visualType": "card",
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "HA Homes Change since 2015 %"
+                }
+              },
+              "queryRef": "_Measures.HA Homes Change since 2015 %",
+              "nativeQueryRef": "HA Homes Change since 2015 %",
+              "displayName": "HA homes since 2015"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

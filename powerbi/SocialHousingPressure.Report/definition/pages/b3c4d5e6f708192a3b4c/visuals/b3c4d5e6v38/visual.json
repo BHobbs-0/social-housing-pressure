@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.4.0/schema.json",
+  "name": "b3c4d5e6v38",
+  "position": {
+    "x": 640,
+    "y": 195,
+    "z": 38000,
+    "height": 130,
+    "width": 300,
+    "tabOrder": 38000
+  },
+  "visual": {
+    "visualType": "card",
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Re-let Rate %"
+                }
+              },
+              "queryRef": "_Measures.Re-let Rate %",
+              "nativeQueryRef": "Re-let Rate %",
+              "displayName": "Re-let rate 2024/25"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

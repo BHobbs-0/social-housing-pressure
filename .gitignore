@@ -1,0 +1,18 @@
+# Source downloads and parse cache: rebuilt by `python src/build_model.py`
+data/raw/
+data/interim/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Power BI project local files (keep the .pbip, .Report and .SemanticModel folders)
+**/.pbi/localSettings.json
+**/.pbi/cache.abf
+*.pbix.bak
+
+# OS
+.DS_Store
+Thumbs.db

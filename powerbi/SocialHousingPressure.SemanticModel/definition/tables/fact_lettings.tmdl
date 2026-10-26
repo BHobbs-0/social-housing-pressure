@@ -1,0 +1,88 @@
+table fact_lettings
+	isHidden
+	lineageTag: b75eaee4-4c4d-40d4-af7d-192e043bf693
+
+	column year_end
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: dfe2bf94-664d-41be-9acb-cd8f9063c102
+		summarizeBy: none
+		sourceColumn: year_end
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column rent_type
+		dataType: string
+		isHidden
+		lineageTag: 2282d3f1-9138-47f9-8939-91f64cac400d
+		summarizeBy: none
+		sourceColumn: rent_type
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column needs_type
+		dataType: string
+		isHidden
+		lineageTag: ca4c4f93-24c5-4294-a235-1fe63f5c5db8
+		summarizeBy: none
+		sourceColumn: needs_type
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column provider_type
+		dataType: string
+		isHidden
+		lineageTag: a0435dbe-6d01-466a-8fc0-fdb7e209a602
+		summarizeBy: none
+		sourceColumn: provider_type
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column la_code
+		dataType: string
+		isHidden
+		lineageTag: c6706888-bcd2-4eee-b9dd-2aaec0375953
+		summarizeBy: none
+		sourceColumn: la_code
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column lettings
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8314eca8-fcdb-4ff8-8935-009668df2a18
+		summarizeBy: none
+		sourceColumn: lettings
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	partition fact_lettings = m
+		mode: import
+		source =
+				fnLoadCsv("fact_lettings.csv", {
+				    {"year_end", type date}, {"la_code", type text}, {"rent_type", type text},
+				    {"needs_type", type text}, {"provider_type", type text}, {"lettings", Int64.Type}
+				})
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

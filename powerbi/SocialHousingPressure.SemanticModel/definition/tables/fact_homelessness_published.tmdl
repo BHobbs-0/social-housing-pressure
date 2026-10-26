@@ -1,0 +1,128 @@
+table fact_homelessness_published
+	lineageTag: df84a1a5-e515-4d67-b5ca-f6608a19c0b6
+
+	column quarter_end
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: 8a5b764f-b2ab-44ad-bca6-a3d4d7914010
+		summarizeBy: none
+		sourceColumn: quarter_end
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column region_code
+		dataType: string
+		isHidden
+		lineageTag: 29751e1a-f85d-435a-94c7-3a030a3950b8
+		summarizeBy: none
+		sourceColumn: region_code
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column households_area_000
+		dataType: double
+		isHidden
+		lineageTag: 0350041b-fd63-45d4-a63a-f6ca750229b1
+		summarizeBy: none
+		sourceColumn: households_area_000
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column initial_assessments
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 970173cd-ebc2-4f11-8abe-6e2cbb3cf002
+		summarizeBy: none
+		sourceColumn: initial_assessments
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column owed_prevention_duty
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 33854c2a-5961-4e2a-98c2-4d463e2a94aa
+		summarizeBy: none
+		sourceColumn: owed_prevention_duty
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column owed_relief_duty
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 45dc3ad5-7302-4e5f-ad0f-0afa6cbae6b4
+		summarizeBy: none
+		sourceColumn: owed_relief_duty
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column households_in_ta
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: a4cfe246-2a51-43b1-a0d8-7d45d9ee5498
+		summarizeBy: none
+		sourceColumn: households_in_ta
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column households_in_ta_with_children
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 59465b81-89db-462f-9d60-2557b9388869
+		summarizeBy: none
+		sourceColumn: households_in_ta_with_children
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column children_in_ta
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 697e8a4c-57d2-43f3-94a8-e38c0c3ccee1
+		summarizeBy: none
+		sourceColumn: children_in_ta
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	partition fact_homelessness_published = m
+		mode: import
+		source =
+				fnLoadCsv("fact_homelessness_published.csv", {
+				    {"quarter_end", type date}, {"region_code", type text},
+				    {"households_area_000", type number}, {"initial_assessments", Int64.Type},
+				    {"owed_prevention_duty", Int64.Type}, {"owed_relief_duty", Int64.Type},
+				    {"households_in_ta", Int64.Type}, {"households_in_ta_with_children", Int64.Type},
+				    {"children_in_ta", Int64.Type}
+				})
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

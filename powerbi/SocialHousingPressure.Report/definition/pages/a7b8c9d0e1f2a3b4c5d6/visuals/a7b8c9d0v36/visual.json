@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.4.0/schema.json",
+  "name": "a7b8c9d0v36",
+  "position": {
+    "x": 1653,
+    "y": 195,
+    "z": 36000,
+    "height": 130,
+    "width": 247,
+    "tabOrder": 36000
+  },
+  "visual": {
+    "visualType": "card",
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Social Homes per 1,000 Households"
+                }
+              },
+              "queryRef": "_Measures.Social Homes per 1,000 Households",
+              "nativeQueryRef": "Social Homes per 1,000 Households",
+              "displayName": "Social homes per 1,000"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

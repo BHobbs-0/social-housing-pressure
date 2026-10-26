@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.4.0/schema.json",
+  "name": "a2b3c4d5v37",
+  "position": {
+    "x": 1600,
+    "y": 195,
+    "z": 37000,
+    "height": 130,
+    "width": 300,
+    "tabOrder": 37000
+  },
+  "visual": {
+    "visualType": "card",
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "Prevention Share Latest Year"
+                }
+              },
+              "queryRef": "_Measures.Prevention Share Latest Year",
+              "nativeQueryRef": "Prevention Share Latest Year",
+              "displayName": "Prevention share, latest year"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

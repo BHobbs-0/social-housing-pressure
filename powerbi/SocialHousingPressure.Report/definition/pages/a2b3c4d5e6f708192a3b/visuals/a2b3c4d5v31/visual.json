@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.4.0/schema.json",
+  "name": "a2b3c4d5v31",
+  "position": {
+    "x": 640,
+    "y": 195,
+    "z": 31000,
+    "height": 130,
+    "width": 300,
+    "tabOrder": 31000
+  },
+  "visual": {
+    "visualType": "card",
+    "drillFilterOtherVisuals": true,
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "_Measures"
+                    }
+                  },
+                  "Property": "TA per 1,000 Households"
+                }
+              },
+              "queryRef": "_Measures.TA per 1,000 Households",
+              "nativeQueryRef": "TA per 1,000 Households",
+              "displayName": "TA per 1,000 households"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "labels": [
+        {
+          "properties": {
+            "labelDisplayUnits": {
+              "expr": {
+                "Literal": {
+                  "Value": "1D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

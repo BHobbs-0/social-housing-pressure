@@ -1,0 +1,11 @@
+region_code,region_name,is_england_total
+E12000004,East Midlands,False
+E12000006,East of England,False
+E12000007,London,False
+E12000001,North East,False
+E12000002,North West,False
+E12000008,South East,False
+E12000009,South West,False
+E12000005,West Midlands,False
+E12000003,Yorkshire and The Humber,False
+E92000001,England,True

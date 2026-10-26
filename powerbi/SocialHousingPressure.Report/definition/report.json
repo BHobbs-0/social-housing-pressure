@@ -1,0 +1,230 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.3.0/schema.json",
+  "themeCollection": {
+    "baseTheme": {
+      "name": "Fluent2-CY26SU08",
+      "reportVersionAtImport": {
+        "visual": "2.12.0",
+        "report": "3.4.0",
+        "page": "2.3.1"
+      },
+      "type": "SharedResources"
+    },
+    "customTheme": {
+      "name": "Social_Housing_Pressure40926953785460796.json",
+      "reportVersionAtImport": {
+        "visual": "2.12.0",
+        "report": "3.4.0",
+        "page": "2.3.1"
+      },
+      "type": "RegisteredResources"
+    }
+  },
+  "objects": {
+    "section": [
+      {
+        "properties": {
+          "verticalAlignment": {
+            "expr": {
+              "Literal": {
+                "Value": "'Top'"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "visible": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
+              }
+            }
+          },
+          "expanded": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "resourcePackages": [
+    {
+      "name": "SharedResources",
+      "type": "SharedResources",
+      "items": [
+        {
+          "name": "Fluent2-CY26SU08",
+          "path": "BaseThemes/Fluent2-CY26SU08.json",
+          "type": "BaseTheme"
+        }
+      ]
+    },
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "ico_building_gold.svg",
+          "path": "ico_building_gold.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_building_ink.svg",
+          "path": "ico_building_ink.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_building_white.svg",
+          "path": "ico_building_white.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_calendar_gold.svg",
+          "path": "ico_calendar_gold.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_check_gold.svg",
+          "path": "ico_check_gold.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_child_gold.svg",
+          "path": "ico_child_gold.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_doc_gold.svg",
+          "path": "ico_doc_gold.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_doc_ink.svg",
+          "path": "ico_doc_ink.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_doc_white.svg",
+          "path": "ico_doc_white.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_door_gold.svg",
+          "path": "ico_door_gold.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_gauge_gold.svg",
+          "path": "ico_gauge_gold.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_gauge_ink.svg",
+          "path": "ico_gauge_ink.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_gauge_white.svg",
+          "path": "ico_gauge_white.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_home_gold.svg",
+          "path": "ico_home_gold.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_home_ink.svg",
+          "path": "ico_home_ink.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_home_white.svg",
+          "path": "ico_home_white.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_key_gold.svg",
+          "path": "ico_key_gold.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_logo_gold.svg",
+          "path": "ico_logo_gold.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_people_gold.svg",
+          "path": "ico_people_gold.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_people_ink.svg",
+          "path": "ico_people_ink.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_people_white.svg",
+          "path": "ico_people_white.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_percent_gold.svg",
+          "path": "ico_percent_gold.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_pin_gold.svg",
+          "path": "ico_pin_gold.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_pin_ink.svg",
+          "path": "ico_pin_ink.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_pound_gold.svg",
+          "path": "ico_pound_gold.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_pound_ink.svg",
+          "path": "ico_pound_ink.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_pound_white.svg",
+          "path": "ico_pound_white.svg",
+          "type": "Image"
+        },
+        {
+          "name": "ico_trend_gold.svg",
+          "path": "ico_trend_gold.svg",
+          "type": "Image"
+        },
+        {
+          "name": "Social_Housing_Pressure40926953785460796.json",
+          "path": "Social_Housing_Pressure40926953785460796.json",
+          "type": "CustomTheme"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "exportDataMode": "AllowSummarized",
+    "defaultDrillFilterOtherVisuals": true,
+    "allowChangeFilterTypes": true,
+    "useEnhancedTooltips": true,
+    "useDefaultAggregateDisplayName": true
+  }
+}

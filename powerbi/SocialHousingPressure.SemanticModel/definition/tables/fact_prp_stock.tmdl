@@ -1,0 +1,229 @@
+table fact_prp_stock
+	lineageTag: a4b4c93e-2db2-4ecd-a189-c0053b9f4c76
+
+	column as_at
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: 2535934d-5b71-41d3-aac7-5cc73bd0018d
+		summarizeBy: none
+		sourceColumn: as_at
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column la_code
+		dataType: string
+		isHidden
+		lineageTag: 19528c16-a225-441c-9982-4a984a1cca1c
+		summarizeBy: none
+		sourceColumn: la_code
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column gn_self_contained_units
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 64a6fe1d-bf27-437c-802f-1c020e0ded59
+		summarizeBy: none
+		sourceColumn: gn_self_contained_units
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column gn_bedspaces
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 27c634a2-50b7-462b-92e2-139bba0042ef
+		summarizeBy: none
+		sourceColumn: gn_bedspaces
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column supported_housing_units
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 45498197-7b77-4ba5-995e-2acd8371b2d4
+		summarizeBy: none
+		sourceColumn: supported_housing_units
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column older_people_units
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 37091804-9144-422d-b3b0-765eeba6bc56
+		summarizeBy: none
+		sourceColumn: older_people_units
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column shared_ownership_units
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1a7f0ba1-cd6c-4584-acf8-351b7d3df980
+		summarizeBy: none
+		sourceColumn: shared_ownership_units
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column total_social_units
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d3c06beb-93d5-439a-9a87-5151c55f2092
+		summarizeBy: none
+		sourceColumn: total_social_units
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column low_cost_rental_units
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 34ddc361-49c0-46d0-8b65-ef51120accd0
+		summarizeBy: none
+		sourceColumn: low_cost_rental_units
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column decent_homes_fails
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 49bde857-4fcf-40d3-9acb-fef7e3fe1a74
+		summarizeBy: none
+		sourceColumn: decent_homes_fails
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column gn_social_rent_units
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f606e3ce-6001-4b0d-830e-013329ff2de7
+		summarizeBy: none
+		sourceColumn: gn_social_rent_units
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column gn_affordable_rent_units
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: f5c18cde-34bf-4f49-980e-cfbff448a309
+		summarizeBy: none
+		sourceColumn: gn_affordable_rent_units
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column large_prp_gn_units
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c5db7de7-6a22-4d34-981b-d32ec6760c16
+		summarizeBy: none
+		sourceColumn: large_prp_gn_units
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column vacant_available_to_let
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 172c8640-03dd-4c39-91ba-e4ebc8b34e4c
+		summarizeBy: none
+		sourceColumn: vacant_available_to_let
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column vacant_total
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 02dee520-d2c8-438c-91b5-b4133188df19
+		summarizeBy: none
+		sourceColumn: vacant_total
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column gn_social_rent_total
+		dataType: double
+		isHidden
+		lineageTag: a2239376-c59c-45fb-9847-74af4e9a8bdb
+		summarizeBy: none
+		sourceColumn: gn_social_rent_total
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column gn_affordable_rent_total
+		dataType: double
+		isHidden
+		lineageTag: 827e4d55-0348-451e-a80b-946f87ca3a0a
+		summarizeBy: none
+		sourceColumn: gn_affordable_rent_total
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition fact_prp_stock = m
+		mode: import
+		source =
+				fnLoadCsv("fact_prp_stock.csv", {
+				    {"as_at", type date}, {"la_code", type text},
+				    {"gn_self_contained_units", Int64.Type}, {"gn_bedspaces", Int64.Type},
+				    {"supported_housing_units", Int64.Type}, {"older_people_units", Int64.Type},
+				    {"shared_ownership_units", Int64.Type}, {"total_social_units", Int64.Type},
+				    {"low_cost_rental_units", Int64.Type}, {"decent_homes_fails", Int64.Type},
+				    {"gn_social_rent_units", Int64.Type}, {"gn_affordable_rent_units", Int64.Type},
+				    {"large_prp_gn_units", Int64.Type}, {"vacant_available_to_let", Int64.Type},
+				    {"vacant_total", Int64.Type}, {"gn_social_rent_total", type number},
+				    {"gn_affordable_rent_total", type number}
+				})
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

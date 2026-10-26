@@ -1,0 +1,58 @@
+table dim_region
+	lineageTag: 180e0cde-b743-4f62-b9a6-e42f2f7e2712
+
+	column region_code
+		dataType: string
+		lineageTag: 4d1a1a4e-b82b-457e-b9d9-779f5bf6ac75
+		summarizeBy: none
+		sourceColumn: region_code
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column region_name
+		dataType: string
+		lineageTag: 1884d5b4-490e-4dfa-9ac2-222928588684
+		summarizeBy: none
+		sourceColumn: region_name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_england_total
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 464b3783-1706-458d-a5cf-a258c6d634df
+		summarizeBy: none
+		sourceColumn: is_england_total
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// London, Rest of England or the England total row; groups the nine regions into two series for charts
+	column region_group =
+			IF (
+			    dim_region[is_england_total],
+			    "England",
+			    IF ( dim_region[region_name] = "London", "London", "Rest of England" )
+			)
+		dataType: string
+		lineageTag: 3f6c1e2a-9b8d-4c7e-a1f5-2d4b6c8e0a13
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_region = m
+		mode: import
+		source =
+				fnLoadCsv("dim_region.csv", {
+				    {"region_code", type text}, {"region_name", type text}, {"is_england_total", type logical}
+				})
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

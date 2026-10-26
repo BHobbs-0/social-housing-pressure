@@ -1,0 +1,620 @@
+table _Measures
+	lineageTag: dcd0b28e-db3e-4726-b855-9434731d5e71
+
+	measure 'Latest Homelessness Quarter' =
+			CALCULATE (
+			    MAX ( fact_homelessness_published[quarter_end] ),
+			    REMOVEFILTERS ( dim_region )
+			)
+		formatString: dd mmm yyyy
+		displayFolder: 0 Helpers
+		lineageTag: c3241878-a735-4107-8369-5810bb83a3ad
+
+	measure 'Latest Quarter Label' =
+			VAR _last = [Latest Homelessness Quarter]
+			RETURN
+			    LOOKUPVALUE ( dim_date[quarter_label], dim_date[date], _last )
+		displayFolder: 0 Helpers
+		lineageTag: 3034a27c-24f1-45b2-a955-fd8a38121d9f
+
+	measure 'Councils in Selection' = COUNTROWS ( dim_local_authority )
+		formatString: #,0
+		displayFolder: 0 Helpers
+		lineageTag: 0acea378-6490-4965-977e-9047177efb5c
+
+	measure 'Councils Reporting TA' =
+			VAR _last = [Latest Homelessness Quarter]
+			RETURN
+			    CALCULATE (
+			        COUNTROWS (
+			            FILTER ( fact_homelessness, NOT ISBLANK ( fact_homelessness[households_in_ta] ) )
+			        ),
+			        dim_date[date] = _last
+			    )
+		formatString: #,0
+		displayFolder: 0 Helpers
+		lineageTag: 15ad61e5-e78a-48ea-b37a-d74aa51d3c9f
+
+	measure 'TA Return Coverage %' = DIVIDE ( [Councils Reporting TA], [Councils in Selection] )
+		formatString: 0.0%
+		displayFolder: 0 Helpers
+		lineageTag: 7d519323-092a-419a-90c8-542917fce206
+
+	measure 'Households in TA' =
+			VAR _last = [Latest Homelessness Quarter]
+			VAR _regionChosen = ISFILTERED ( dim_region )
+			RETURN
+			    IF (
+			        ISFILTERED ( dim_local_authority ),
+			        CALCULATE ( SUM ( fact_homelessness[households_in_ta] ), dim_date[date] = _last ),
+			        CALCULATE (
+			            SUM ( fact_homelessness_published[households_in_ta] ),
+			            dim_date[date] = _last,
+			            dim_region[is_england_total] = NOT _regionChosen
+			        )
+			    )
+		formatString: #,0
+		displayFolder: 1 Homelessness
+		lineageTag: cacb3b4e-5663-4f98-960b-f1c56a56dab8
+
+	measure 'Children in TA' =
+			VAR _last = [Latest Homelessness Quarter]
+			VAR _regionChosen = ISFILTERED ( dim_region )
+			RETURN
+			    IF (
+			        ISFILTERED ( dim_local_authority ),
+			        CALCULATE ( SUM ( fact_homelessness[children_in_ta] ), dim_date[date] = _last ),
+			        CALCULATE (
+			            SUM ( fact_homelessness_published[children_in_ta] ),
+			            dim_date[date] = _last,
+			            dim_region[is_england_total] = NOT _regionChosen
+			        )
+			    )
+		formatString: #,0
+		displayFolder: 1 Homelessness
+		lineageTag: 1b31c917-6aca-408a-971b-9c1573145d14
+
+	measure 'TA Households with Children %' =
+			VAR _last = [Latest Homelessness Quarter]
+			VAR _regionChosen = ISFILTERED ( dim_region )
+			RETURN
+			    IF (
+			        ISFILTERED ( dim_local_authority ),
+			        CALCULATE (
+			            DIVIDE (
+			                SUM ( fact_homelessness[households_in_ta_with_children] ),
+			                SUM ( fact_homelessness[households_in_ta] )
+			            ),
+			            dim_date[date] = _last
+			        ),
+			        CALCULATE (
+			            DIVIDE (
+			                SUM ( fact_homelessness_published[households_in_ta_with_children] ),
+			                SUM ( fact_homelessness_published[households_in_ta] )
+			            ),
+			            dim_date[date] = _last,
+			            dim_region[is_england_total] = NOT _regionChosen
+			        )
+			    )
+		formatString: 0.0%
+		displayFolder: 1 Homelessness
+		lineageTag: 5f5276c7-9e04-4ae9-8cbc-396f96ade96a
+
+	/// Per 1,000 households. Council version divides only by households in councils that submitted a TA figure, so a missing return doesn't make an area look better than it is.
+	measure 'TA per 1,000 Households' =
+			VAR _last = [Latest Homelessness Quarter]
+			VAR _regionChosen = ISFILTERED ( dim_region )
+			RETURN
+			    IF (
+			        ISFILTERED ( dim_local_authority ),
+			        CALCULATE (
+			            DIVIDE (
+			                SUM ( fact_homelessness[households_in_ta] ),
+			                SUMX (
+			                    FILTER ( fact_homelessness, NOT ISBLANK ( fact_homelessness[households_in_ta] ) ),
+			                    fact_homelessness[households_area_000]
+			                )
+			            ),
+			            dim_date[date] = _last
+			        ),
+			        CALCULATE (
+			            DIVIDE (
+			                SUM ( fact_homelessness_published[households_in_ta] ),
+			                SUM ( fact_homelessness_published[households_area_000] )
+			            ),
+			            dim_date[date] = _last,
+			            dim_region[is_england_total] = NOT _regionChosen
+			        )
+			    )
+		formatString: 0.0
+		displayFolder: 1 Homelessness
+		lineageTag: d62418ff-f7c4-4569-82f6-81672b43061f
+
+	measure 'TA Change vs Year Earlier %' =
+			VAR _last = [Latest Homelessness Quarter]
+			VAR _now = [Households in TA]
+			VAR _prior =
+			    CALCULATE ( [Households in TA], dim_date[date] = EOMONTH ( _last, -12 ) )
+			RETURN
+			    IF ( ISBLANK ( _now ) || ISBLANK ( _prior ), BLANK (), DIVIDE ( _now - _prior, _prior ) )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 1 Homelessness
+		lineageTag: deb3aa1e-3f70-4ff3-bbbe-48ad9572b339
+
+	/// Flow: households assessed as owed a prevention or relief duty, summed over the quarters in context
+	measure 'Owed a Duty' =
+			VAR _regionChosen = ISFILTERED ( dim_region )
+			RETURN
+			    IF (
+			        ISFILTERED ( dim_local_authority ),
+			        SUM ( fact_homelessness[owed_prevention_duty] ) + SUM ( fact_homelessness[owed_relief_duty] ),
+			        CALCULATE (
+			            SUM ( fact_homelessness_published[owed_prevention_duty] )
+			                + SUM ( fact_homelessness_published[owed_relief_duty] ),
+			            dim_region[is_england_total] = NOT _regionChosen
+			        )
+			    )
+		formatString: #,0
+		displayFolder: 1 Homelessness
+		lineageTag: d4641335-efcc-43b8-ba5b-efe5da000e06
+
+	measure 'Owed Prevention Duty' =
+			VAR _regionChosen = ISFILTERED ( dim_region )
+			RETURN
+			    IF (
+			        ISFILTERED ( dim_local_authority ),
+			        SUM ( fact_homelessness[owed_prevention_duty] ),
+			        CALCULATE (
+			            SUM ( fact_homelessness_published[owed_prevention_duty] ),
+			            dim_region[is_england_total] = NOT _regionChosen
+			        )
+			    )
+		formatString: #,0
+		displayFolder: 1 Homelessness
+		lineageTag: 2c732caa-eeb0-4bb6-b7cf-e3375a62681d
+
+	measure 'Owed Relief Duty' = [Owed a Duty] - [Owed Prevention Duty]
+		formatString: #,0
+		displayFolder: 1 Homelessness
+		lineageTag: 7d605a66-40f6-4faa-9988-365708184a7e
+
+	/// Share of duties owed before the household became homeless: a rough gauge of how early councils intervene
+	measure 'Prevention Share %' = DIVIDE ( [Owed Prevention Duty], [Owed a Duty] )
+		formatString: 0.0%
+		displayFolder: 1 Homelessness
+		lineageTag: 3c855218-16a6-4f9b-90eb-ce34dce2df0b
+
+	/// Per 1,000 households over the period in context. For councils, only those with a complete set of returns for the period are included.
+	measure 'Owed a Duty per 1,000 Households' =
+			VAR _regionChosen = ISFILTERED ( dim_region )
+			RETURN
+			    IF (
+			        ISFILTERED ( dim_local_authority ),
+			        VAR _byCouncil =
+			            ADDCOLUMNS (
+			                VALUES ( dim_local_authority[la_code] ),
+			                "@duty",
+			                    CALCULATE (
+			                        SUM ( fact_homelessness[owed_prevention_duty] )
+			                            + SUM ( fact_homelessness[owed_relief_duty] )
+			                    ),
+			                "@quarters", CALCULATE ( COUNTROWS ( fact_homelessness ) ),
+			                "@reported",
+			                    CALCULATE (
+			                        COUNTROWS (
+			                            FILTER (
+			                                fact_homelessness,
+			                                NOT ISBLANK ( fact_homelessness[owed_prevention_duty] )
+			                            )
+			                        )
+			                    ),
+			                "@households", CALCULATE ( SUM ( dim_local_authority[households_000_latest] ) )
+			            )
+			        VAR _complete =
+			            FILTER ( _byCouncil, [@quarters] > 0 && [@reported] = [@quarters] )
+			        RETURN
+			            DIVIDE ( SUMX ( _complete, [@duty] ), SUMX ( _complete, [@households] ) ),
+			        VAR _last = [Latest Homelessness Quarter]
+			        VAR _households =
+			            CALCULATE (
+			                SUM ( fact_homelessness_published[households_area_000] ),
+			                dim_date[date] = _last,
+			                dim_region[is_england_total] = NOT _regionChosen
+			            )
+			        RETURN
+			            DIVIDE ( [Owed a Duty], _households )
+			    )
+		formatString: 0.0
+		displayFolder: 1 Homelessness
+		lineageTag: c245541a-b58a-4691-a9be-eacdddf8d729
+
+	measure 'New Lettings' = SUM ( fact_lettings[lettings] )
+		formatString: #,0
+		displayFolder: 2 Lettings
+		lineageTag: 766a00fc-3b0d-45ba-901a-e481db8649ae
+
+	/// Lettings in the latest financial year within the selection (2024/25 unless a year is chosen)
+	measure 'New Lettings Latest Year' =
+			VAR _y = MAX ( fact_lettings[year_end] )
+			RETURN
+			    CALCULATE ( [New Lettings], dim_date[date] = _y )
+		formatString: #,0
+		displayFolder: 2 Lettings
+		lineageTag: 6f1d2c3b-8a47-4e2f-9b1c-5d3e7a9f0b21
+
+	measure 'General Needs Lettings' = CALCULATE ( [New Lettings], fact_lettings[needs_type] = "General Needs" )
+		formatString: #,0
+		displayFolder: 2 Lettings
+		lineageTag: 71324223-cecf-4865-aec2-76a26862de19
+
+	measure 'Social Rent Lettings' = CALCULATE ( [New Lettings], fact_lettings[rent_type] = "Social Rent" )
+		formatString: #,0
+		displayFolder: 2 Lettings
+		lineageTag: 5f0806d3-d447-4c07-a6ab-a7087063a9f7
+
+	measure 'Social Rent Share of Lettings %' = DIVIDE ( [Social Rent Lettings], [New Lettings] )
+		formatString: 0.0%
+		displayFolder: 2 Lettings
+		lineageTag: 4252968a-1677-4069-b693-c27ec5f05941
+
+	/// Uses the latest household estimate as the denominator; best read for a single financial year
+	measure 'Lettings per 1,000 Households' = DIVIDE ( [New Lettings], SUM ( dim_local_authority[households_000_latest] ) )
+		formatString: 0.0
+		displayFolder: 2 Lettings
+		lineageTag: 19eb0f7c-3b0e-428c-843c-1ddfb5d695be
+
+	measure 'Lettings Change vs Previous Year %' =
+			VAR _now = [New Lettings]
+			VAR _prev = CALCULATE ( [New Lettings], DATEADD ( dim_date[date], -1, YEAR ) )
+			RETURN
+			    IF ( ISBLANK ( _prev ), BLANK (), DIVIDE ( _now - _prev, _prev ) )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 2 Lettings
+		lineageTag: d86ba0af-78be-4bbe-9952-45081b3283a2
+
+	/// All social homes (council and housing association) at 1 April 2024
+	measure 'Social Homes' = SUM ( fact_relets_2025[social_stock_1_april] )
+		formatString: #,0
+		displayFolder: 3 Social housing stock
+		lineageTag: f22b1204-6c76-427f-b1ec-4c1eaa6a7446
+
+	measure 'Social Homes per 1,000 Households' = DIVIDE ( [Social Homes], SUM ( dim_local_authority[households_000_latest] ) )
+		formatString: 0.0
+		displayFolder: 3 Social housing stock
+		lineageTag: 31121f15-eaaa-4da6-84c6-38e38e02da0d
+
+	measure 'Re-lets 2024-25' = SUM ( fact_relets_2025[relets] )
+		formatString: #,0
+		displayFolder: 3 Social housing stock
+		lineageTag: b2fa4091-d044-4a60-87c6-4ff1049af0e7
+
+	/// Share of existing social homes that came up for re-let in 2024/25 (churn)
+	measure 'Re-let Rate %' = DIVIDE ( [Re-lets 2024-25], [Social Homes] )
+		formatString: 0.0%
+		displayFolder: 3 Social housing stock
+		lineageTag: 41ac3850-2277-4bb7-a791-46482520c371
+
+	/// Housing association (PRP) homes at the latest 31 March in context
+	measure 'HA Social Homes' =
+			VAR _d = MAX ( fact_prp_stock[as_at] )
+			RETURN
+			    CALCULATE ( SUM ( fact_prp_stock[total_social_units] ), dim_date[date] = _d )
+		formatString: #,0
+		displayFolder: 3 Social housing stock
+		lineageTag: 406651f4-767e-4641-afdf-069a08d4769f
+
+	measure 'HA Homes Change since 2015 %' =
+			VAR _now = [HA Social Homes]
+			VAR _base =
+			    CALCULATE ( SUM ( fact_prp_stock[total_social_units] ), dim_date[date] = DATE ( 2015, 3, 31 ) )
+			RETURN
+			    DIVIDE ( _now - _base, _base )
+		formatString: +0.0%;-0.0%;0.0%
+		displayFolder: 3 Social housing stock
+		lineageTag: 9e214374-b0a7-4677-bae7-7a75f147e130
+
+	measure 'HA Vacancy Rate %' =
+			VAR _d = MAX ( fact_prp_stock[as_at] )
+			RETURN
+			    CALCULATE (
+			        DIVIDE ( SUM ( fact_prp_stock[vacant_total] ), SUM ( fact_prp_stock[large_prp_gn_units] ) ),
+			        dim_date[date] = _d
+			    )
+		formatString: 0.00%
+		displayFolder: 3 Social housing stock
+		lineageTag: 85d948d8-1e0a-4161-995b-24ddd6a2b793
+
+	measure 'HA Homes Failing Decent Homes %' =
+			VAR _d = MAX ( fact_prp_stock[as_at] )
+			RETURN
+			    CALCULATE (
+			        DIVIDE ( SUM ( fact_prp_stock[decent_homes_fails] ), SUM ( fact_prp_stock[low_cost_rental_units] ) ),
+			        dim_date[date] = _d
+			    )
+		formatString: 0.00%
+		displayFolder: 3 Social housing stock
+		lineageTag: 68c4dae0-ac55-4354-9f64-a66c848b857e
+
+	measure 'Avg Social Re-let Rent' = DIVIDE ( SUM ( fact_relets_2025[relet_rent_total] ), [Re-lets 2024-25] )
+		formatString: £#,0.00
+		displayFolder: 4 Rents and affordability (weekly, GBP)
+		lineageTag: d0f75192-4279-4823-84c9-04de2f19c7d2
+
+	measure 'Avg Market Rent' = DIVIDE ( SUM ( fact_relets_2025[market_rent_total] ), SUM ( fact_relets_2025[relets_with_market_rent] ) )
+		formatString: £#,0.00
+		displayFolder: 4 Rents and affordability (weekly, GBP)
+		lineageTag: 85784ae6-c1e7-462d-8c9a-9d04502b7fae
+
+	/// Weighted only over re-lets where a market rent is published
+	measure 'Social Rent as % of Market' =
+			DIVIDE (
+			    SUM ( fact_relets_2025[relet_rent_total_market_matched] ),
+			    SUM ( fact_relets_2025[market_rent_total] )
+			)
+		formatString: 0.0%
+		displayFolder: 4 Rents and affordability (weekly, GBP)
+		lineageTag: abe9435e-b442-4f01-9df5-d182b2c34578
+
+	measure 'Weekly Rent Gap to Market' = [Avg Market Rent] - [Avg Social Re-let Rent]
+		formatString: £#,0.00
+		displayFolder: 4 Rents and affordability (weekly, GBP)
+		lineageTag: b570f2f9-0189-42cd-985f-8dbffa08b054
+
+	/// Unit-weighted average net rent, housing association general needs Social Rent homes
+	measure 'HA Avg Social Rent' =
+			VAR _d = MAX ( fact_prp_stock[as_at] )
+			RETURN
+			    CALCULATE (
+			        DIVIDE ( SUM ( fact_prp_stock[gn_social_rent_total] ), SUM ( fact_prp_stock[gn_social_rent_units] ) ),
+			        dim_date[date] = _d
+			    )
+		formatString: £#,0.00
+		displayFolder: 4 Rents and affordability (weekly, GBP)
+		lineageTag: a60a1baf-5e41-467d-9eb8-65129d1762b1
+
+	measure 'HA Avg Affordable Rent' =
+			VAR _d = MAX ( fact_prp_stock[as_at] )
+			RETURN
+			    CALCULATE (
+			        DIVIDE ( SUM ( fact_prp_stock[gn_affordable_rent_total] ), SUM ( fact_prp_stock[gn_affordable_rent_units] ) ),
+			        dim_date[date] = _d
+			    )
+		formatString: £#,0.00
+		displayFolder: 4 Rents and affordability (weekly, GBP)
+		lineageTag: 448f84e1-8445-419c-9893-48385249233e
+
+	/// Households in TA at the end of the year for every new social letting made in the year
+	measure 'TA Households per New Letting' = DIVIDE ( [Households in TA], [New Lettings] )
+		formatString: 0.00
+		displayFolder: 5 Pressure
+		lineageTag: 34aae201-60b5-48ca-baf5-b64da694d121
+
+	/// 0 to 100 within the councils currently selected; higher = more pressure. Sort a council table by this measure to rank them. It averages three percentiles: TA per 1,000 households (higher = more pressure) duties owed per 1,000 households (higher = more pressure) new lettings per 1,000 households (lower = more pressure) Peers are evaluated once into a table variable, which keeps it fast on a 300-row table.
+	measure 'Pressure Index' =
+			VAR _myTA = [TA per 1,000 Households]
+			VAR _myDuty = [Owed a Duty per 1,000 Households]
+			VAR _myLet = [Lettings per 1,000 Households]
+			VAR _peers =
+			    FILTER (
+			        ADDCOLUMNS (
+			            ALLSELECTED ( dim_local_authority[la_name] ),
+			            "@ta", [TA per 1,000 Households],
+			            "@duty", [Owed a Duty per 1,000 Households],
+			            "@let", [Lettings per 1,000 Households]
+			        ),
+			        NOT ISBLANK ( [@ta] ) && NOT ISBLANK ( [@duty] ) && NOT ISBLANK ( [@let] )
+			    )
+			VAR _n = COUNTROWS ( _peers )
+			VAR _pTA = DIVIDE ( COUNTROWS ( FILTER ( _peers, [@ta] < _myTA ) ), _n - 1 )
+			VAR _pDuty = DIVIDE ( COUNTROWS ( FILTER ( _peers, [@duty] < _myDuty ) ), _n - 1 )
+			VAR _pLet = DIVIDE ( COUNTROWS ( FILTER ( _peers, [@let] > _myLet ) ), _n - 1 )
+			RETURN
+			    IF (
+			        HASONEVALUE ( dim_local_authority[la_name] )
+			            && NOT ISBLANK ( _myTA )
+			            && NOT ISBLANK ( _myDuty )
+			            && NOT ISBLANK ( _myLet )
+			            && _n > 1,
+			        ROUND ( ( _pTA + _pDuty + _pLet ) / 3 * 100, 0 )
+			    )
+		formatString: 0
+		displayFolder: 5 Pressure
+		lineageTag: a6caebd3-d22b-4237-a043-7faf73a83ba3
+
+	measure 'Selection Label' =
+			SWITCH (
+			    TRUE (),
+			    HASONEVALUE ( dim_local_authority[la_name] ), VALUES ( dim_local_authority[la_name] ),
+			    ISFILTERED ( dim_local_authority ), FORMAT ( [Councils in Selection], "0" ) & " councils",
+			    HASONEVALUE ( dim_region[region_name] ), VALUES ( dim_region[region_name] ),
+			    ISFILTERED ( dim_region ), "Selected regions",
+			    "England"
+			)
+		displayFolder: 6 Titles
+		lineageTag: 0946878f-eebb-44f4-977b-20ee5d93ab3e
+
+	measure 'TA Card Subtitle' =
+			"At end of " & [Latest Quarter Label] & " · "
+			    & FORMAT ( [TA Change vs Year Earlier %], "+0.0%;-0.0%" ) & " on a year earlier"
+		displayFolder: 6 Titles
+		lineageTag: 6b8cec86-69b7-40e0-870e-6a6a318b237b
+
+	measure 'Coverage Note' =
+			IF (
+			    ISFILTERED ( dim_local_authority ) && [TA Return Coverage %] < 1,
+			    FORMAT ( [Councils in Selection] - [Councils Reporting TA], "0" )
+			        & " council(s) in this selection did not submit TA data for "
+			        & [Latest Quarter Label] & ".",
+			    ""
+			)
+		displayFolder: 6 Titles
+		lineageTag: df7dd703-7080-4fec-b859-369c98b89024
+
+	/// Pressure Index ranked against every council in England for the year, whatever is selected. Used in tooltips, where only the hovered council is in context.
+	measure 'Pressure Index (All Councils)' =
+			VAR _myTA = [TA per 1,000 Households]
+			VAR _myDuty = [Owed a Duty per 1,000 Households]
+			VAR _myLet = [Lettings per 1,000 Households]
+			VAR _peers =
+			    CALCULATETABLE (
+			        FILTER (
+			            ADDCOLUMNS (
+			                VALUES ( dim_local_authority[la_name] ),
+			                "@ta", [TA per 1,000 Households],
+			                "@duty", [Owed a Duty per 1,000 Households],
+			                "@let", [Lettings per 1,000 Households]
+			            ),
+			            NOT ISBLANK ( [@ta] ) && NOT ISBLANK ( [@duty] ) && NOT ISBLANK ( [@let] )
+			        ),
+			        REMOVEFILTERS ( dim_local_authority ),
+			        REMOVEFILTERS ( dim_region )
+			    )
+			VAR _n = COUNTROWS ( _peers )
+			VAR _pTA = DIVIDE ( COUNTROWS ( FILTER ( _peers, [@ta] < _myTA ) ), _n - 1 )
+			VAR _pDuty = DIVIDE ( COUNTROWS ( FILTER ( _peers, [@duty] < _myDuty ) ), _n - 1 )
+			VAR _pLet = DIVIDE ( COUNTROWS ( FILTER ( _peers, [@let] > _myLet ) ), _n - 1 )
+			RETURN
+			    IF (
+			        HASONEVALUE ( dim_local_authority[la_name] )
+			            && NOT ISBLANK ( _myTA )
+			            && NOT ISBLANK ( _myDuty )
+			            && NOT ISBLANK ( _myLet )
+			            && _n > 1,
+			        ROUND ( ( _pTA + _pDuty + _pLet ) / 3 * 100, 0 )
+			    )
+		formatString: 0
+		displayFolder: 5 Pressure
+		lineageTag: f124936f-0664-54ee-8aaa-a774b298a36f
+
+	/// Header pill, e.g. "Data to Jan to Mar 2026"
+	measure 'Latest Data Label' = "Data to " & [Latest Quarter Label]
+		displayFolder: 6 Titles
+		lineageTag: a78be76a-f37d-5770-9032-22525b1eccc7
+
+	/// Header pill, e.g. "284 of 296 councils reported TA"
+	measure 'Coverage Label' =
+			FORMAT ( [Councils Reporting TA], "#,0" ) & " of "
+			    & FORMAT ( [Councils in Selection], "#,0" ) & " councils reported TA"
+		displayFolder: 6 Titles
+		lineageTag: 22ca8a1f-d4f1-5a43-bcba-0bf16ae0402a
+
+	/// Pressure Index (All Councils) for 2024/25, the latest year with all three inputs, whatever year is selected. Used in tooltips and the council profile.
+	measure 'Pressure Index 2024/25' =
+			CALCULATE (
+			    [Pressure Index (All Councils)],
+			    REMOVEFILTERS ( dim_date ),
+			    dim_date[financial_year] = "2024/25"
+			)
+		formatString: 0
+		displayFolder: 5 Pressure
+		lineageTag: 0c9fb88c-3798-5e17-8bb6-e8c0b4ce7a51
+
+	/// New lettings in the latest year in the selection per 1,000 households, so it never sums several years
+	measure 'Lettings per 1,000 (Latest Year)' = DIVIDE ( [New Lettings Latest Year], SUM ( dim_local_authority[households_000_latest] ) )
+		formatString: 0.0
+		displayFolder: 2 Lettings
+		lineageTag: 9af9f509-65c4-53f9-8c93-e1f7d4b7f36b
+
+	/// TA rate for the region of the council(s) in context, from published regional totals. Benchmark on the council profile.
+	measure 'TA per 1,000 (Region)' =
+			CALCULATE (
+			    [TA per 1,000 Households],
+			    REMOVEFILTERS ( dim_local_authority ),
+			    TREATAS ( VALUES ( dim_local_authority[region_code] ), dim_region[region_code] )
+			)
+		formatString: 0.0
+		displayFolder: 1 Homelessness
+		lineageTag: 5275aa27-ae00-5962-91ca-7032b0d4d279
+
+	/// England TA rate for the same quarter, whatever council or region is selected. Benchmark on the council profile.
+	measure 'TA per 1,000 (England)' =
+			CALCULATE (
+			    [TA per 1,000 Households],
+			    REMOVEFILTERS ( dim_local_authority ),
+			    REMOVEFILTERS ( dim_region )
+			)
+		formatString: 0.0
+		displayFolder: 1 Homelessness
+		lineageTag: b9e679d5-a935-5ce7-808a-459b609132ae
+
+	/// Council profile subtitle, e.g. "London · London borough"
+	measure 'Council Context Label' =
+			IF (
+			    HASONEVALUE ( dim_local_authority[la_name] ),
+			    SELECTEDVALUE ( dim_local_authority[region_name] ) & "  ·  "
+			        & SELECTEDVALUE ( dim_local_authority[la_type] ),
+			    "Select a council"
+			)
+		displayFolder: 6 Titles
+		lineageTag: c18af9d8-d939-58c1-9545-485696bffce3
+
+	/// 1 if homelessness data exists for the dates in context; filters year slicers to years with data
+	measure 'Has TA Data' = INT ( CALCULATE ( NOT ISEMPTY ( fact_homelessness_published ), REMOVEFILTERS ( dim_region ) ) )
+		formatString: 0
+		isHidden
+		displayFolder: 0 Helpers
+		lineageTag: f1b63304-5039-5bec-a82b-c6b2f889c1e3
+
+	/// 1 if lettings or housing association stock data exists for the dates in context
+	measure 'Has Supply Data' =
+			INT (
+			    CALCULATE (
+			        NOT ISEMPTY ( fact_lettings ) || NOT ISEMPTY ( fact_prp_stock ),
+			        REMOVEFILTERS ( dim_local_authority ),
+			        REMOVEFILTERS ( dim_region )
+			    )
+			)
+		formatString: 0
+		isHidden
+		displayFolder: 0 Helpers
+		lineageTag: 878a9a97-c52e-50ae-b8c8-5eb415cacc01
+
+	/// 1 if housing association stock and rent data exists for the dates in context
+	measure 'Has HA Rent Data' =
+			INT (
+			    CALCULATE (
+			        NOT ISEMPTY ( fact_prp_stock ),
+			        REMOVEFILTERS ( dim_local_authority ),
+			        REMOVEFILTERS ( dim_region )
+			    )
+			)
+		formatString: 0
+		isHidden
+		displayFolder: 0 Helpers
+		lineageTag: 8e0beba0-1ede-59d4-a935-a788c4656170
+
+	/// Households owed a prevention or relief duty in the latest financial year in the selection
+	measure 'Owed a Duty Latest Year' =
+			VAR _last = [Latest Homelessness Quarter]
+			VAR _fy = LOOKUPVALUE ( dim_date[financial_year_sort], dim_date[date], _last )
+			RETURN
+			    CALCULATE ( [Owed a Duty], REMOVEFILTERS ( dim_date ), dim_date[financial_year_sort] = _fy )
+		formatString: #,0
+		displayFolder: 1 Homelessness
+		lineageTag: 082b1413-2f10-5788-bdc4-0804c9c4d1c5
+
+	/// Prevention share of duties owed in the latest financial year in the selection
+	measure 'Prevention Share Latest Year' =
+			VAR _last = [Latest Homelessness Quarter]
+			VAR _fy = LOOKUPVALUE ( dim_date[financial_year_sort], dim_date[date], _last )
+			RETURN
+			    DIVIDE (
+			        CALCULATE ( [Owed Prevention Duty], REMOVEFILTERS ( dim_date ), dim_date[financial_year_sort] = _fy ),
+			        [Owed a Duty Latest Year]
+			    )
+		formatString: 0.0%
+		displayFolder: 1 Homelessness
+		lineageTag: 7402d84a-bd01-555a-a8ac-88ff431e317d
+
+	partition _Measures = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i44FAA==", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [Column1 = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Column1", type text}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type",{"Column1"})
+				in
+				    #"Removed Columns"
+
+	annotation PBI_ResultType = Table
+

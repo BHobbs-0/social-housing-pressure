@@ -81,7 +81,8 @@
           }
         }
       }
-    ]
+    ],
+    "acceptsFilterContext": "None"
   },
   "visibility": "HiddenInViewMode"
 }

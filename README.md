@@ -2,10 +2,15 @@
 
 A Power BI dashboard comparing how much social housing each English council area has, how much of it comes up for letting, and how much pressure is building in homelessness and temporary accommodation. The data is built by a reproducible Python pipeline from official statistics, reconciled back to the published totals.
 
-<!-- Open powerbi/SocialHousingPressure.pbip in Power BI Desktop, check the pages render, then add screenshots here, e.g.
-![Overview page](docs/images/overview.png)
-![Pressure by council](docs/images/pressure.png)
--->
+![Walkthrough of the report](docs/images/walkthrough.gif)
+
+The full report is also available as a [PDF](docs/SocialHousingPressure.pdf).
+
+| | |
+|---|---|
+| ![Overview](docs/images/01-overview.png) | ![Homelessness and temporary accommodation](docs/images/02-homelessness.png) |
+| ![Social housing supply](docs/images/03-supply.png) | ![Pressure by council](docs/images/04-pressure.png) |
+| ![Rents and affordability](docs/images/05-rents.png) | ![Council profile](docs/images/07-council-profile.png) |
 
 ## Key findings
 
@@ -82,6 +87,8 @@ powerbi/
   theme.json                            report theme
 docs/
   data_dictionary.md
+  SocialHousingPressure.pdf             the full report as a PDF
+  images/                               page images and walkthrough
 ```
 
 ## Caveats
